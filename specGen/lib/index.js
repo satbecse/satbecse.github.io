@@ -28,11 +28,12 @@ async function highlight(label, confidence) {
 
 const NUM_FRAMES = numFramesPerSpectrogramValue;
 const INPUT_SHAPE = [NUM_FRAMES, columnTruncateLengthValue, 1];
-const words = {
+/*const words = {
   0: '_background_noise',
   1: 'negative',
   2: 'ok_atlas',
-};
+};*/
+const words = { 0:'ok_atlas', }     // Sathish : Changed words as per the latest model
 
 async function listen() {
   if (specGenerator.isListening()) {
