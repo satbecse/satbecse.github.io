@@ -50,7 +50,7 @@
             this.audioContext = new this.audioContextConstructor();                   // Sathish 1. getting the audio context 
             //console.log(this.audioContext)
             try {
-                stream = await navigator.mediaDevices.getUserMedia({ audio: true })    // Sathish 2. Accessing the mic 
+                this.stream = await navigator.mediaDevices.getUserMedia({ audio: true })    // Sathish 2. Accessing the mic 
             } catch (err) {
                 console.log('Error:', err)
             }
