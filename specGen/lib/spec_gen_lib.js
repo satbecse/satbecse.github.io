@@ -65,7 +65,7 @@
 
             this.spectrogramCounter = 0;
 //            console.log('Seconds:' ,this.fftSize / this.sampleRateHz * 1e3)           // 43.46     
-            this.frameIntervalTask = setInterval(this.getFrequencyData.bind(this), this.fftSize / this.sampleRateHz * 1e3);
+            this.frameIntervalTask = setInterval(this.getSpectrogramData.bind(this), this.fftSize / this.sampleRateHz * 1e3);
         }
 
         FftFeatureExtractor.prototype.stop = function () {
@@ -78,7 +78,7 @@
             this.spectrogramCounter = 0;
         }
 
-        FftFeatureExtractor.prototype.getFrequencyData = function () {
+        FftFeatureExtractor.prototype.getSpectrogramData = function () {
             var flatQueue,spectrogramData;
            // this.spectrogramData = null;
             this.analyser.getFloatFrequencyData(this.freqData)
