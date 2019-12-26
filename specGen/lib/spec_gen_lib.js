@@ -45,7 +45,8 @@
         }
 
         FftFeatureExtractor.prototype.start = async function (config) {
-            var streamSource, stream = null;
+            var streamSource;
+            this.stream = null;
             this.audioContext = new this.audioContextConstructor();                   // Sathish 1. getting the audio context 
             //console.log(this.audioContext)
             try {
@@ -53,7 +54,7 @@
             } catch (err) {
                 console.log('Error:', err)
             }
-            streamSource = this.audioContext.createMediaStreamSource(stream)           //Sathish 3. creating the MediaStreamSource
+            streamSource = this.audioContext.createMediaStreamSource(this.stream)           //Sathish 3. creating the MediaStreamSource
             this.analyser = this.audioContext.createAnalyser();                        //Sathish 4. creating an Analyser
             this.analyser.fftSize = this.fftSize;  //* 2;
             streamSource.connect(this.analyser)                                        //Sathish 5. Connecting the analyser with streamSource
