@@ -153,11 +153,3 @@
     exports.create = create;
 
 })));
-
-
-/* Note :
-
-Here,
- SpectrogramGenerator = BrowserFftSpeechCommandRecognizer
- FftFeatureExtractor  = BrowserFftFeatureExtractor
- */
