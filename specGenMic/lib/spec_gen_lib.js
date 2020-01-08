@@ -31,11 +31,11 @@
                 (this.suppressionOnset == null ||
                     this.counter - this.suppressionOnset > this.suppressionTime);*/
 
-            /*if(shouldFire){
+            if(shouldFire){
             //console.log('counter:',this.counter,' period:',this.period)
             //console.log('shouldFire:',shouldFire)    
-           // this.counter =0;    
-            }*/
+            this.counter =this.numFrames+1;    
+            }
             return shouldFire;
         };
         /*Tracker.prototype.suppress = function () {
@@ -73,16 +73,16 @@
         }
 
         FftFeatureExtractor.prototype.start = async function (config) {
+           /* working code
             var streamSource, period;
             this.stream = null;
             this.audioContext = new this.audioContextConstructor();                   // Sathish 1. getting the audio context 
-            var constraints = {
-                "audio": true
-            };
+            
             this.analyser = this.audioContext.createAnalyser();
             console.log(this)
 
             //console.log(this.audioContext)
+          
             try {
                 this.stream = await navigator.mediaDevices.getUserMedia({ audio: true }) // Sathish 2. Accessing the mic 
             } catch (err) {
@@ -91,24 +91,33 @@
             streamSource = this.audioContext.createMediaStreamSource(this.stream)      //Sathish 3. creating the MediaStreamSource
             this.analyser = this.audioContext.createAnalyser();                        //Sathish 4. creating an Analyser
             streamSource.connect(this.analyser)                                        //Sathish 5. Connecting the analyser with streamSource
+          */
 
-            /* navigator.getUserMedia(constraints, successCallback, errorCallback);
+
+            var streamSource, period;
+            this.audioContext = new this.audioContextConstructor();  
+            var constraints = { "audio": true  };
+            console.log("Analyser fftsize",this.analyser.fftSize)
+            this.scriptNode = this.audioContext.createScriptProcessor(this.analyser.fftSize, 1, 1);
+            this.scriptNode.onaudioprocess = this.onAudioFrame();
+
+            navigator.getUserMedia(constraints, successCallback, errorCallback);
  
              var _this = this;
              function successCallback(stream) {
                  _this.stream = stream;
                  _this.audioContext.resume().then(() => {
-                     streamSource = _this.audioContext.createMediaStreamSource(_this.stream);
+                     streamSource = _this.audioContext.createMediaStreamSource(stream);
                      streamSource.connect(_this.analyser);
-                     //this.analyser.connect(_this.scriptNode);
+                     this.analyser.connect(_this.scriptNode);
  
-                     // This is needed for chrome
-                     //this.scriptNode.connect(_this.audioCtx.destination);
+                     //This is needed for chrome
+                     this.scriptNode.connect(_this.audioCtx.destination);
                  });
              }
              function errorCallback(error) {
                  console.error('navigator.getUserMedia1 error: ', error);
-             }*/
+             }
 
             console.log("Analyser is:", this.analyser);
             this.analyser.fftSize = this.fftSize;  //* 2;
