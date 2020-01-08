@@ -4,7 +4,7 @@ let model;
 async function app() {
   specGenerator = speechCommands.create();
   //console.log(specGenerator)
-  model = await tf.loadLayersModel(inputUrl+'/model/model.json');     // Reading from Properties file
+  model = await tf.loadLayersModel(inputUrl+'model/model.json');     // Reading from Properties file
 }
 
 app().then((result) => {
