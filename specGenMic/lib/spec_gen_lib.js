@@ -126,10 +126,10 @@
                  _this.audioContext.resume().then(() => {
                      streamSource = _this.audioContext.createMediaStreamSource(stream);
                      streamSource.connect(_this.analyser);
-                     this.analyser.connect(_this.scriptNode);
+                     _this.analyser.connect(_this.scriptNode);
  
                      //This is needed for chrome
-                     this.scriptNode.connect(_this.audioCtx.destination);
+                     _this.scriptNode.connect(_this.audioCtx.destination);
                  });
              }
              function errorCallback(error) {
