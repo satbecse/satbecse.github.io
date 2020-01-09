@@ -70,6 +70,21 @@
             console.log('sampleRateHz:', this.sampleRateHz)
             console.log('fftSize:', this.fftSize)
             console.log('columnTruncateLength:', this.columnTruncateLength)
+
+            //Get an audio context 
+            this.audioContext = new this.audioContextConstructor(); 
+
+            // Create an analyser
+            this.analyser = this.audioContext.createAnalyser(); 
+            this.constraints = { "audio": true  };
+            this.analyser.fftSize = this.fftSize;
+            console.log("Analyser fftsize",this.analyser.fftSize)
+
+            // Create the scriptNode
+            this.scriptNode = this.audioContext.createScriptProcessor(this.analyser.fftSize, 1, 1);
+            this.scriptNode.onaudioprocess = this.onAudioFrame();
+
+
         }
 
         FftFeatureExtractor.prototype.start = async function (config) {
@@ -95,13 +110,13 @@
 
 
             var streamSource, period;
-            this.audioContext = new this.audioContextConstructor(); 
+            /*this.audioContext = new this.audioContextConstructor(); 
             this.analyser = this.audioContext.createAnalyser(); 
             var constraints = { "audio": true  };
             this.analyser.fftSize = this.fftSize;
             console.log("Analyser fftsize",this.analyser.fftSize)
             this.scriptNode = this.audioContext.createScriptProcessor(this.analyser.fftSize, 1, 1);
-            this.scriptNode.onaudioprocess = this.onAudioFrame();
+            this.scriptNode.onaudioprocess = this.onAudioFrame(); */
 
             navigator.getUserMedia(constraints, successCallback, errorCallback);
  
