@@ -118,7 +118,7 @@
             this.scriptNode = this.audioContext.createScriptProcessor(this.analyser.fftSize, 1, 1);
             this.scriptNode.onaudioprocess = this.onAudioFrame(); */
 
-            navigator.getUserMedia(constraints, successCallback, errorCallback);
+            navigator.getUserMedia(this.constraints, successCallback, errorCallback);
  
              var _this = this;
              function successCallback(stream) {
