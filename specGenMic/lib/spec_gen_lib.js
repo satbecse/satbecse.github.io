@@ -78,7 +78,7 @@
             this.stream = null;
             this.audioContext = new this.audioContextConstructor();                   // Sathish 1. getting the audio context 
             
-            this.analyser = this.audioContext.createAnalyser();
+            this.analyser = this.audioContext.createAnalyser();    // 2 times 
             console.log(this)
 
             //console.log(this.audioContext)
@@ -89,15 +89,16 @@
                 console.log('Error:', err)
             }
             streamSource = this.audioContext.createMediaStreamSource(this.stream)      //Sathish 3. creating the MediaStreamSource
-            this.analyser = this.audioContext.createAnalyser();                        //Sathish 4. creating an Analyser
+            this.analyser = this.audioContext.createAnalyser();     // 2 times                   //Sathish 4. creating an Analyser
             streamSource.connect(this.analyser)                                        //Sathish 5. Connecting the analyser with streamSource
           */
 
 
             var streamSource, period;
-            this.audioContext = new this.audioContextConstructor();  
+            this.audioContext = new this.audioContextConstructor(); 
+            this.analyser = this.audioContext.createAnalyser(); 
             var constraints = { "audio": true  };
-            this.analyser.fftSize = 2048;                  //this.fftSize;
+            this.analyser.fftSize = this.fftSize;
             console.log("Analyser fftsize",this.analyser.fftSize)
             this.scriptNode = this.audioContext.createScriptProcessor(this.analyser.fftSize, 1, 1);
             this.scriptNode.onaudioprocess = this.onAudioFrame();
