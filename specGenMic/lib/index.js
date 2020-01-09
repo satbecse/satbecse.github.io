@@ -19,6 +19,7 @@ async function highlight(label, confidence) {
   }
   if ((label == 'ok_atlas') && (confidence > confidenceThreshold)) {
     document.getElementById('ok_atlas').classList.add('green_background');
+    console.log('OK ATLAS DETECTED !!!!')
     //document.getElementById('yes').play();
   }
   else {
