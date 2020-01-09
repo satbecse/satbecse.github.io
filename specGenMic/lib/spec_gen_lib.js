@@ -160,54 +160,31 @@
             this.spectrogramCounter = 0;
         }
 
+        
         FftFeatureExtractor.prototype.onAudioFrame = function () {
+            var _this = this;
+            return function(audioProcessingEvent){
             var flatQueue, spectrogramData, shouldFire;
             // this.spectrogramData = null;
-            this.analyser.getFloatFrequencyData(this.freqData)
-            if (this.freqData[0] === -Infinity || 0) {
+            _this.analyser.getFloatFrequencyData(_this.freqData)
+            if (_this.freqData[0] === -Infinity || 0) {
                 return;
             }
 
-            this.freqDataQueue.push(this.freqData.slice(0, this.columnTruncateLength));    //columnTruncateLength is 232
-
-
-            /* this.audioContext.onstatechange = function () {     //Sathish :debugging 
-                 console.log('Audio Context state :', this.audioContext.state);
-             }  */
-
-            if (this.freqDataQueue.length > this.numFrames) {          //this.numFrames : 43
-                /* console.log('freqDataQueue:',this.freqDataQueue)
-                 console.log('length b4',this.freqDataQueue.length)*/
-                this.freqDataQueue.shift();
-                /* console.log('freqDataQueue:',this.freqDataQueue)
-                 console.log('length after',this.freqDataQueue.length)*/
-
+            _this.freqDataQueue.push(_this.freqData.slice(0, _this.columnTruncateLength));    //columnTruncateLength is 232
+            
+            if (_this.freqDataQueue.length > _this.numFrames) {          //this.numFrames : 43
+                _this.freqDataQueue.shift();
             }
-            shouldFire = this.tracker.tick();
+            shouldFire = _this.tracker.tick();
 
             if (shouldFire) {
-                flatQueue = flattenQueue(this.freqDataQueue)
+                flatQueue = flattenQueue(_this.freqDataQueue)
                 spectrogramData = normalize(flatQueue)
-                //console.log('Time:',getTime()) ///* new Date(),*/new Date().getMilliseconds())
-                //                    console.log('normalizedData or spectrogramData :', this.spectrogramCounter++, /*this.*/spectrogramData)
-                //console.log('freqQueue:', freqQueue)   
-                this.spectrogramCallback(spectrogramData)
+                _this.spectrogramCallback(spectrogramData)
             }
-
-            /*
-             console.log('CTL:',this.columnTruncateLength);
-            if (this.freqDataQueue.length > this.numFrames - 1) {       // It has to be 55
-                flatQueue = flattenQueue(this.freqDataQueue)
-                spectrogramData = normalize(flatQueue)
-                // this.spectrogramData = normalize(flatQueue)
-                console.log('normalizedData or spectrogramData :', this.spectrogramCounter++, this.spectrogramData)
-                //console.log('freqQueue:', freqQueue)   
-                this.spectrogramCallback(spectrogramData)                  // Callback with Spectrogram Data               
-                // const deleteCount = Math.floor(this.freqDataQueue.length   * (1 - this.overlapFactor));    // 0.25 is a overlapfactor   
-                const deleteCount = Math.floor(this.numFrames * (1 - this.overlapFactor));    // 0.25 is a overlapfactor   
-                this.freqDataQueue.splice(0, deleteCount)
-            } */
-        }
+        } 
+    }
         return FftFeatureExtractor;
     }());
 
