@@ -97,7 +97,7 @@
             var streamSource, period;
             this.audioContext = new this.audioContextConstructor();  
             var constraints = { "audio": true  };
-            this.analyser.fftSize = this.fftSize;
+            this.analyser.fftSize = 2048;                  //this.fftSize;
             console.log("Analyser fftsize",this.analyser.fftSize)
             this.scriptNode = this.audioContext.createScriptProcessor(this.analyser.fftSize, 1, 1);
             this.scriptNode.onaudioprocess = this.onAudioFrame();
