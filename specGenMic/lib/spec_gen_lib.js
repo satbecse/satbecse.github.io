@@ -147,7 +147,8 @@
             //            console.log('Seconds:' ,this.fftSize / this.sampleRateHz * 1e3)           // 43.46  
             period = Math.max(1, Math.round(this.numFrames * (1 - this.overlapFactor)));
             this.tracker = new Tracker(period, this.numFrames)
-            this.frameIntervalTask = setInterval(this.onAudioFrame.bind(this), this.fftSize / this.sampleRateHz * 1e3);
+          // this.frameIntervalTask = setInterval(this.onAudioFrame.bind(this), this.fftSize / this.sampleRateHz * 1e3);
+            this.frameIntervalTask = setInterval(this.onAudioFrame.bind(this), 1024 / this.sampleRateHz * 1e3);
         }
 
         FftFeatureExtractor.prototype.stop = function () {
