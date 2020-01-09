@@ -129,7 +129,7 @@
                      _this.analyser.connect(_this.scriptNode);
  
                      //This is needed for chrome
-                     _this.scriptNode.connect(_this.audioCtx.destination);
+                     _this.scriptNode.connect(_this.audioContext.destination);
                  });
              }
              function errorCallback(error) {
