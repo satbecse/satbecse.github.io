@@ -92,11 +92,10 @@
             this.analyser.fftSize = this.fftSize;  //* 2;
             this.freqDataQueue = [];
             this.freqData = new Float32Array(this.fftSize);                          // data = new Float32Array(analyser.frequencyBinCount); 
-            this.spectrogramCounter = 0;
             period = Math.max(1, Math.round(this.numFrames * (1 - this.overlapFactor)));
             this.tracker = new Tracker(period, this.numFrames)
-            // this.frameIntervalTask = setInterval(this.onAudioFrame.bind(this), this.fftSize / this.sampleRateHz * 1e3);
-            this.frameIntervalTask = setInterval(this.onAudioFrame.bind(this), 1024 / this.sampleRateHz * 1e3);
+           // this.frameIntervalTask = setInterval(this.onAudioFrame.bind(this), 1024 / this.sampleRateHz * 1e3);
+           this.frameIntervalTask = setInterval(this.onAudioFrame.bind(this), frameInterval);
         }
 
         FftFeatureExtractor.prototype.stop = function () {
@@ -106,7 +105,6 @@
             if (this.stream != null && this.stream.getTracks().length > 0) {
                 this.stream.getTracks()[0].stop();
             }
-            this.spectrogramCounter = 0;
         }
 
 

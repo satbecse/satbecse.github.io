@@ -6,3 +6,4 @@ const fftSizeValue=2048                           // fftSizeValue has to be a po
 const sampleRateHzValue=44100
 const numFramesPerSpectrogramValue=56             // 
 const columnTruncateLengthValue=232               //
+const frameIntervalTasktime = 1024 /sampleRateHzValue * 1e3
