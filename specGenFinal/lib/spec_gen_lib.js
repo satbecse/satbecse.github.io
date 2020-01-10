@@ -88,9 +88,10 @@
                 console.error('navigator.getUserMedia1 error: ', error);
             }
 
-            //console.log("Analyser is:", this.analyser); 
+            console.log("Analyser is:", this.analyser); 
+            this.analyser.fftSize = this.fftSize;  //* 2;
             this.freqDataQueue = [];
-            this.freqData = new Float32Array(this.analyser.fftSize);                          // data = new Float32Array(analyser.frequencyBinCount); 
+            this.freqData = new Float32Array(this.fftSize);                          // data = new Float32Array(analyser.frequencyBinCount); 
             this.spectrogramCounter = 0;
             period = Math.max(1, Math.round(this.numFrames * (1 - this.overlapFactor)));
             this.tracker = new Tracker(period, this.numFrames)

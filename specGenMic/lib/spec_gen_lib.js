@@ -215,7 +215,7 @@
         }
 
         SpectrogramGenerator.prototype.isListening = function () {
-            //console.log('I am here from isLiestening()')
+            //console.log('I am here from isListening()')
             return this.streaming;
         };
         return SpectrogramGenerator;
