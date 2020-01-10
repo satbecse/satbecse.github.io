@@ -1,6 +1,6 @@
 let specGenerator;
 let model; 
-let threshold = 0.99;
+//let threshold = 0.99;
 let count = 0;
 var chartData = [];
 var xVal = 0;
@@ -25,7 +25,7 @@ async function highlight(confidence) {
   for(let i=0;i<pred_divs.length;i++){
     pred_divs[i].classList.remove('green_background');
   }
-  if((confidence >threshold)){
+  if((confidence >confidenceThreshold)){
     document.getElementById('ok_atlas').innerHTML = 'ok_Atlas<br>' + confidence.toFixed(5);
     document.getElementById('ok_atlas').classList.add('green_background');
     console.log("OK ATLAS DETECTED!")
@@ -41,7 +41,7 @@ async function highlight(confidence) {
 function setThreshold(){
   let value = document.getElementById("threshold").value;
   console.log("update threshold: ",value);
-  threshold = value;
+  confidenceThreshold = value;
 }
 
 const NUM_FRAMES = numFramesPerSpectrogramValue;
