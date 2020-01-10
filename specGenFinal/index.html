@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <script src="./lib/tf.min.js"></script>
+    <script src="./lib/properties.js"></script>
+    <script src="./lib/spec_gen_lib.js"></script>
+    <!-- <script src="./lib/speechcommands.js"></script> -->
+    <script src="./lib/canvasjs.min.js"></script>
+    <script src="./lib/index2.js"></script>
+    
+    <link rel="stylesheet" href="./lib/styles.css">
+    <title>Offline Recognition</title>
+  </head> 
+  <body>
+    <button id="listen" onclick="listen()" class="button" disabled="true">Listen for "OK ATLAS"</button>
+    
+    <p>
+      Note: The numbers in the above icons represent the value of the model's prediction (i.e. it's confidence) at that particular instance (max 1.0).
+      <br>
+      <br>
+      Set "Okay, Atlas" activation threshold (0 - 1.0) : 
+      <br>
+      <input type="text" name="threshold" id="threshold" value="0.99">
+      <button type="button" id="set" class="button" onclick="setThreshold()">Set threshold</button>
+      <br>
+      <button id="model_version" class="info"></button>
+    </p>
+    <div id="console"></div>
+    <div id="predictions" style="display: none;flex-direction: row">
+      <div id="ok_atlas" class="prediction">OK ATLAS</div>
+      <div id="other" class="negative">Other</div>
+    </div>
+    <div id="chartContainer" style="height: 300px; width: 50%;"></div>
+    <script>
+      var chart = new CanvasJS.Chart('chartContainer', {
+        title: {
+          text: "Confidence"
+        },
+        axisY: {
+          includeZero: false,
+          maximum: 1.25,
+          minimum: 0,
+          markerSize:0
+        },      
+        data: [{
+          type: "line",
+          dataPoints: chartData
+        }]
+      });
+    </script>
+
+  </body>
+</html>
