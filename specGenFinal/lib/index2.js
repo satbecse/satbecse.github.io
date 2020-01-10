@@ -9,7 +9,7 @@ async function app() {
   specGenerator = speechCommands.create();
   let modelName = "atlas_model_v7_2";
   console.log("model used:", modelName);
-  model = await tf.loadLayersModel('http://127.0.0.1:8080/models/'+ modelName +'/model.json');
+  model = await tf.loadLayersModel(inputUrl+'/models/'+ modelName +'/model.json');
   document.getElementById('model_version').innerHTML = "Model used: " + modelName;
   updateChart(0);
 }
