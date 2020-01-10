@@ -31,10 +31,10 @@
                 (this.suppressionOnset == null ||
                     this.counter - this.suppressionOnset > this.suppressionTime);*/
 
-            if(shouldFire){
-            //console.log('counter:',this.counter,' period:',this.period)
-            //console.log('shouldFire:',shouldFire)    
-            this.counter =this.numFrames+1;    
+            if (shouldFire) {
+                //console.log('counter:',this.counter,' period:',this.period)
+                //console.log('shouldFire:',shouldFire)    
+                this.counter = this.numFrames + 1;
             }
             return shouldFire;
         };
@@ -72,13 +72,13 @@
             console.log('columnTruncateLength:', this.columnTruncateLength)
 
             //Get an audio context 
-            this.audioContext = new this.audioContextConstructor(); 
+            this.audioContext = new this.audioContextConstructor();
 
             // Create an analyser
-            this.analyser = this.audioContext.createAnalyser(); 
-            this.constraints = { "audio": true  };
+            this.analyser = this.audioContext.createAnalyser();
+            this.constraints = { "audio": true };
             this.analyser.fftSize = this.fftSize;
-            console.log("Analyser fftsize",this.analyser.fftSize)
+            console.log("Analyser fftsize", this.analyser.fftSize)
 
             // Create the scriptNode
             this.scriptNode = this.audioContext.createScriptProcessor(this.analyser.fftSize, 1, 1);
@@ -88,25 +88,25 @@
         }
 
         FftFeatureExtractor.prototype.start = async function (config) {
-           /* working code
-            var streamSource, period;
-            this.stream = null;
-            this.audioContext = new this.audioContextConstructor();                   // Sathish 1. getting the audio context 
-            
-            this.analyser = this.audioContext.createAnalyser();    // 2 times 
-            console.log(this)
-
-            //console.log(this.audioContext)
-          
-            try {
-                this.stream = await navigator.mediaDevices.getUserMedia({ audio: true }) // Sathish 2. Accessing the mic 
-            } catch (err) {
-                console.log('Error:', err)
-            }
-            streamSource = this.audioContext.createMediaStreamSource(this.stream)      //Sathish 3. creating the MediaStreamSource
-            this.analyser = this.audioContext.createAnalyser();     // 2 times                   //Sathish 4. creating an Analyser
-            streamSource.connect(this.analyser)                                        //Sathish 5. Connecting the analyser with streamSource
-          */
+            /* working code
+             var streamSource, period;
+             this.stream = null;
+             this.audioContext = new this.audioContextConstructor();                   // Sathish 1. getting the audio context 
+             
+             this.analyser = this.audioContext.createAnalyser();    // 2 times 
+             console.log(this)
+ 
+             //console.log(this.audioContext)
+           
+             try {
+                 this.stream = await navigator.mediaDevices.getUserMedia({ audio: true }) // Sathish 2. Accessing the mic 
+             } catch (err) {
+                 console.log('Error:', err)
+             }
+             streamSource = this.audioContext.createMediaStreamSource(this.stream)      //Sathish 3. creating the MediaStreamSource
+             this.analyser = this.audioContext.createAnalyser();     // 2 times                   //Sathish 4. creating an Analyser
+             streamSource.connect(this.analyser)                                        //Sathish 5. Connecting the analyser with streamSource
+           */
 
 
             var streamSource, period;
@@ -119,22 +119,22 @@
             this.scriptNode.onaudioprocess = this.onAudioFrame(); */
 
             navigator.getUserMedia(this.constraints, successCallback, errorCallback);
- 
-             var _this = this;
-             function successCallback(stream) {
-                 _this.stream = stream;
-                 _this.audioContext.resume().then(() => {
-                     streamSource = _this.audioContext.createMediaStreamSource(stream);
-                     streamSource.connect(_this.analyser);
-                     _this.analyser.connect(_this.scriptNode);
- 
-                     //This is needed for chrome
-                     _this.scriptNode.connect(_this.audioContext.destination);
-                 });
-             }
-             function errorCallback(error) {
-                 console.error('navigator.getUserMedia1 error: ', error);
-             }
+
+            var _this = this;
+            function successCallback(stream) {
+                _this.stream = stream;
+                _this.audioContext.resume().then(() => {
+                    streamSource = _this.audioContext.createMediaStreamSource(stream);
+                    streamSource.connect(_this.analyser);
+                    _this.analyser.connect(_this.scriptNode);
+
+                    //This is needed for chrome
+                    _this.scriptNode.connect(_this.audioContext.destination);
+                });
+            }
+            function errorCallback(error) {
+                console.error('navigator.getUserMedia1 error: ', error);
+            }
 
             console.log("Analyser is:", this.analyser);
             this.analyser.fftSize = this.fftSize;  //* 2;
@@ -147,7 +147,7 @@
             //            console.log('Seconds:' ,this.fftSize / this.sampleRateHz * 1e3)           // 43.46  
             period = Math.max(1, Math.round(this.numFrames * (1 - this.overlapFactor)));
             this.tracker = new Tracker(period, this.numFrames)
-          // this.frameIntervalTask = setInterval(this.onAudioFrame.bind(this), this.fftSize / this.sampleRateHz * 1e3);
+            // this.frameIntervalTask = setInterval(this.onAudioFrame.bind(this), this.fftSize / this.sampleRateHz * 1e3);
             this.frameIntervalTask = setInterval(this.onAudioFrame.bind(this), 1024 / this.sampleRateHz * 1e3);
         }
 
@@ -161,31 +161,31 @@
             this.spectrogramCounter = 0;
         }
 
-        
+
         FftFeatureExtractor.prototype.onAudioFrame = function () {
             var _this = this;
-            return function(audioProcessingEvent){
-            var flatQueue, spectrogramData, shouldFire;
-            // this.spectrogramData = null;
-            _this.analyser.getFloatFrequencyData(_this.freqData)
-            if (_this.freqData[0] === -Infinity || 0) {
-                return;
-            }
+            return function (audioProcessingEvent) {
+                var flatQueue, spectrogramData, shouldFire;
+                // this.spectrogramData = null;
+                _this.analyser.getFloatFrequencyData(_this.freqData)
+                if (_this.freqData[0] === -Infinity || 0) {
+                    return;
+                }
 
-            _this.freqDataQueue.push(_this.freqData.slice(0, _this.columnTruncateLength));    //columnTruncateLength is 232
-            
-            if (_this.freqDataQueue.length > _this.numFrames) {          //this.numFrames : 43
-                _this.freqDataQueue.shift();
-            }
-            shouldFire = _this.tracker.tick();
+                _this.freqDataQueue.push(_this.freqData.slice(0, _this.columnTruncateLength));    //columnTruncateLength is 232
 
-            if (shouldFire) {
-                flatQueue = flattenQueue(_this.freqDataQueue)
-                spectrogramData = normalize(flatQueue)
-                _this.spectrogramCallback(spectrogramData)
+                if (_this.freqDataQueue.length > _this.numFrames) {          //this.numFrames : 43
+                    _this.freqDataQueue.shift();
+                }
+                shouldFire = _this.tracker.tick();
+
+                if (shouldFire) {
+                    flatQueue = flattenQueue(_this.freqDataQueue)
+                    spectrogramData = normalize(flatQueue)
+                    _this.spectrogramCallback(spectrogramData)
+                }
             }
-        } 
-    }
+        }
         return FftFeatureExtractor;
     }());
 
