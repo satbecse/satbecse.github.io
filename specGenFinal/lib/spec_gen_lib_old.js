@@ -73,9 +73,9 @@
            // console.log("Analyser fftsize", this.analyser.fftSize)
 
             // Create the scriptProcessorNode
-            this.scriptProcessorNode = this.audioContext.createScriptProcessor(2048, 1, 1);         
-            //this.scriptProcessorNode.onaudioprocess = this.continuousListener();  
-            this.scriptProcessorNode.onaudioprocess = this.onAudioFrame();    
+            this.scriptProcessorNode = this.audioContext.createScriptProcessor(16384, 1, 1);         
+            this.scriptProcessorNode.onaudioprocess = this.continuousListener();  
+           // this.scriptProcessorNode.onaudioprocess = this.onAudioFrame();    
                     
         }
 
@@ -169,26 +169,23 @@
         */
         
         FftFeatureExtractor.prototype.onAudioFrame = function () {                         // Gets called every 23.219(frameInterval) milliseconds. i.e for each frame
-            console.log('onAudioFrame:', getTime())
+            //console.log('onAudioFrame:', getTime())
             var flatQueue, spectrogramData, shouldFire;
-            var _this = this;
-            return function(audioProcessingEvent){
-            _this.analyser.getFloatFrequencyData(_this.freqData)
-            if (_this.freqData[0] === -Infinity || 0) {
+            this.analyser.getFloatFrequencyData(this.freqData)
+            if (this.freqData[0] === -Infinity || 0) {
                 return;
             }
-            _this.freqDataQueue.push(_this.freqData.slice(0, _this.columnTruncateLength));    //columnTruncateLength is 232
-            if (_this.freqDataQueue.length > _this.numFrames) {
-                _this.freqDataQueue.shift();
+            this.freqDataQueue.push(this.freqData.slice(0, this.columnTruncateLength));    //columnTruncateLength is 232
+            if (this.freqDataQueue.length > this.numFrames) {
+                this.freqDataQueue.shift();
             }
-            shouldFire = _this.tracker.tick();
+            shouldFire = this.tracker.tick();
             if (shouldFire) {
-                flatQueue = flattenQueue(_this.freqDataQueue)
+                flatQueue = flattenQueue(this.freqDataQueue)
                 spectrogramData = normalize(flatQueue)
-                _this.spectrogramCallback(spectrogramData)
+                this.spectrogramCallback(spectrogramData)
             }
         }
-    }
         return FftFeatureExtractor;
     }());
 
