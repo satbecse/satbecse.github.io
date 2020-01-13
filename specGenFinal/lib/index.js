@@ -89,7 +89,8 @@ async function listen(){
     sampleRateHz : sampleRateHzValue,
     overlapFactor: overlapFactorThreshold,
     numFramesPerSpectrogram: numFramesPerSpectrogramValue, 
-    columnTruncateLength:columnTruncateLengthValue
+    columnTruncateLength:columnTruncateLengthValue,
+    frameInterval:frameIntervalValue
   });
 }
 

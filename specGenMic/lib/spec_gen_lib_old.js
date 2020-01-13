@@ -62,7 +62,7 @@
             this.sampleRateHz = config.sampleRateHz || 44100;
             this.fftSize = config.fftSize || 1024;              // It has to be a power of 2
             // this.frameDurationMillis = this.fftSize / this.sampleRateHz * 1e3;
-            this.columnTruncateLength = config.columnTruncateLength || this.fftSize;    // 232    //Doubt         
+            this.columnTruncateLength = config.columnTruncateLength || this.fftSize;    // 232    //Doubt    
             this.audioContextConstructor = getAudioContextConstructor();
             this.spectrogramCallback = callback;
             console.log('overlapFactor:', this.overlapFactor)

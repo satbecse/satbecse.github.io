@@ -1,9 +1,9 @@
-//const inputUrl="http://127.0.0.1:8080/"
-const inputUrl="https://satbecse.github.io/specGenFinal"
+const inputUrl="http://127.0.0.1:8080/"
+//const inputUrl="https://satbecse.github.io/specGenFinal"
 const confidenceThreshold=0.99                    // confidenceThreshold has be between 0 to 1
 const overlapFactorThreshold=0.75                 // overlapFactorThreshold has be between 0 to 1
 const fftSizeValue=2048                           // fftSizeValue has to be a power of 2
 const sampleRateHzValue=44100
 const numFramesPerSpectrogramValue=56             // 
 const columnTruncateLengthValue=232               //
-const frameInterval= 1024 /sampleRateHzValue * 1e3
+const frameIntervalValue= 1024 /sampleRateHzValue * 1e3
