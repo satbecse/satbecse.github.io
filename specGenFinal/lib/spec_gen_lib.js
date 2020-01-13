@@ -54,7 +54,7 @@
             console.log('sampleRateHz           :', this.sampleRateHz)
             console.log('fftSize                :', this.fftSize)
             console.log('columnTruncateLength   :', this.columnTruncateLength)
-            console.log('frameInterval          :',this.frameInterval)
+            console.log('frameInterval          :', this.frameInterval)
             console.log('-------------------------------------------------')
 
             this.audioContextConstructor = getAudioContextConstructor();
@@ -62,7 +62,7 @@
 
             // getUserMedia Constraints 
             this.constraints = { "audio": true };
-            
+
 
             //Get an audio context 
             this.audioContext = new this.audioContextConstructor();
@@ -70,13 +70,13 @@
             // Create an analyser
             this.analyser = this.audioContext.createAnalyser();
             this.analyser.fftSize = this.fftSize;
-           // console.log("Analyser fftsize", this.analyser.fftSize)
+            // console.log("Analyser fftsize", this.analyser.fftSize)
 
             // Create the scriptProcessorNode
-            this.scriptProcessorNode = this.audioContext.createScriptProcessor(2048, 1, 1);         
+            this.scriptProcessorNode = this.audioContext.createScriptProcessor(1024, 1, 1);
             //this.scriptProcessorNode.onaudioprocess = this.continuousListener();  
-            this.scriptProcessorNode.onaudioprocess = this.onAudioFrame();    
-                    
+            this.scriptProcessorNode.onaudioprocess = this.onAudioFrame();
+
         }
 
         // scriptProcessorNode helps specGenerator to listen continuously though safari is out of focus(minimized or background) or even when device is locked                                                                                        
@@ -84,24 +84,24 @@
         FftFeatureExtractor.prototype.continuousListener = function (audioProcessingEvent) {
             //var _this =this
             return function (audioProcessingEvent) {
-              //  if(_this.dummycounter > 15)
-             console.info('') 
+                //  if(_this.dummycounter > 15)
+                console.info('')
             }
         }
 
-         /* Function : Start 
-                                                     Fig : Audio Graph
-                    _________________________________________________________________________________________________      
-                    |                                     Audio Context                                              |
-                    |    ________________________________________________________________________________________    |
-                    |   |   --------           ----------           --------------------           -----------   |   |      
-                    |   |  | source | ------> | analyser | ------> |scriptProcessorNode | ------> |Destination|  |   |      
-                    |   |   --------           ----------           --------------------           -----------   |   |      
-                    |   |________________________________________________________________________________________|   |          
-                    |                                                                                                |
-                    |_______________________________________________________________________________________________ |
-                    
-        */
+        /* Function : Start 
+                                                    Fig : Audio Graph
+                   _________________________________________________________________________________________________      
+                   |                                     Audio Context                                              |
+                   |    ________________________________________________________________________________________    |
+                   |   |   --------           ----------           --------------------           -----------   |   |      
+                   |   |  | source | ------> | analyser | ------> |scriptProcessorNode | ------> |Destination|  |   |      
+                   |   |   --------           ----------           --------------------           -----------   |   |      
+                   |   |________________________________________________________________________________________|   |          
+                   |                                                                                                |
+                   |_______________________________________________________________________________________________ |
+                   
+       */
 
 
         FftFeatureExtractor.prototype.start = async function () {
@@ -111,17 +111,17 @@
             function successCallback(stream) {                                                       // Suceess : User Gave Permission to Access Mic  
                 _this.stream = stream
                 _this.audioContext.resume().then(() => {
-                    source = _this.audioContext.createMediaStreamSource(stream);                   
+                    source = _this.audioContext.createMediaStreamSource(stream);
                     source.connect(_this.analyser);
                     _this.analyser.connect(_this.scriptProcessorNode);
                     //This is needed for chrome
-                    _this.scriptProcessorNode.connect(_this.audioContext.destination);        
+                    _this.scriptProcessorNode.connect(_this.audioContext.destination);
 
                     _this.freqDataQueue = [];
                     _this.freqData = new Float32Array(_this.fftSize);
                     period = Math.max(1, Math.round(_this.numFrames * (1 - _this.overlapFactor)));                   // period  = max(1,round(56*0.25)) = 14
                     _this.tracker = new Tracker(period, _this.numFrames)
-                  //  _this.dummyIntervalTask = setInterval(_this.continuousListener.bind(_this),1024)
+                    //  _this.dummyIntervalTask = setInterval(_this.continuousListener.bind(_this),1024)
                     _this.frameIntervalTask = setInterval(_this.onAudioFrame.bind(_this), _this.frameInterval);      // frameInterval = 1024/44100*1000 =23.2199
                 });
             }
@@ -133,7 +133,7 @@
         }
 
         FftFeatureExtractor.prototype.stop = function () {
-           // clearInterval(this.dummyIntervalTask)
+            // clearInterval(this.dummyIntervalTask)
             clearInterval(this.frameIntervalTask)
             this.analyser.disconnect();
             this.scriptProcessorNode.disconnect();
@@ -167,28 +167,29 @@
             Totally there are 56 frames (i.e1300/23.219).
                                                                               
         */
-        
+
         FftFeatureExtractor.prototype.onAudioFrame = function () {                         // Gets called every 23.219(frameInterval) milliseconds. i.e for each frame
-            console.log('onAudioFrame:', getTime())
+
+            //console.log('onAudioFrame:', getTime())
             var flatQueue, spectrogramData, shouldFire;
             var _this = this;
-            return function(audioProcessingEvent){
-            _this.analyser.getFloatFrequencyData(_this.freqData)
-            if (_this.freqData[0] === -Infinity || 0) {
-                return;
-            }
-            _this.freqDataQueue.push(_this.freqData.slice(0, _this.columnTruncateLength));    //columnTruncateLength is 232
-            if (_this.freqDataQueue.length > _this.numFrames) {
-                _this.freqDataQueue.shift();
-            }
-            shouldFire = _this.tracker.tick();
-            if (shouldFire) {
-                flatQueue = flattenQueue(_this.freqDataQueue)
-                spectrogramData = normalize(flatQueue)
-                _this.spectrogramCallback(spectrogramData)
+            return function (audioProcessingEvent) {
+                _this.analyser.getFloatFrequencyData(_this.freqData)
+                if (_this.freqData[0] === -Infinity || 0) {
+                    return;
+                }
+                _this.freqDataQueue.push(_this.freqData.slice(0, _this.columnTruncateLength));    //columnTruncateLength is 232
+                if (_this.freqDataQueue.length > _this.numFrames) {
+                    _this.freqDataQueue.shift();
+                }
+                shouldFire = _this.tracker.tick();
+                if (shouldFire) {
+                    flatQueue = flattenQueue(_this.freqDataQueue)
+                    spectrogramData = normalize(flatQueue)
+                    _this.spectrogramCallback(spectrogramData)
+                }
             }
         }
-    }
         return FftFeatureExtractor;
     }());
 
