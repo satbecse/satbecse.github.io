@@ -73,22 +73,10 @@
             // console.log("Analyser fftsize", this.analyser.fftSize)
 
             // Create the scriptProcessorNode
-            this.scriptProcessorNode = this.audioContext.createScriptProcessor(1024, 1, 1);
-            //this.scriptProcessorNode.onaudioprocess = this.continuousListener();  
+            this.scriptProcessorNode = this.audioContext.createScriptProcessor(1024, 1, 1);  
             this.scriptProcessorNode.onaudioprocess = this.onAudioFrame();
 
         }
-
-        // scriptProcessorNode helps specGenerator to listen continuously though safari is out of focus(minimized or background) or even when device is locked                                                                                        
-        // This gets called continously as soon as the Input Buffer is filled
-        FftFeatureExtractor.prototype.continuousListener = function (audioProcessingEvent) {
-            //var _this =this
-            return function (audioProcessingEvent) {
-                //  if(_this.dummycounter > 15)
-                console.info('')
-            }
-        }
-
         /* Function : Start 
                                                     Fig : Audio Graph
                    _________________________________________________________________________________________________      
@@ -121,7 +109,6 @@
                     _this.freqData = new Float32Array(_this.fftSize);
                     period = Math.max(1, Math.round(_this.numFrames * (1 - _this.overlapFactor)));                   // period  = max(1,round(56*0.25)) = 14
                     _this.tracker = new Tracker(period, _this.numFrames)
-                    //  _this.dummyIntervalTask = setInterval(_this.continuousListener.bind(_this),1024)
                     _this.frameIntervalTask = setInterval(_this.onAudioFrame.bind(_this), _this.frameInterval);      // frameInterval = 1024/44100*1000 =23.2199
                 });
             }
